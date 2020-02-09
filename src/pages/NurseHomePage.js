@@ -1,47 +1,100 @@
 import React, { useEffect } from 'react';
+import { history } from '../index';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchNurseData } from '../store/nurse/actions';
-import { Tabs, Tab } from 'react-bootstrap';
-import UserProfile from '../components/UserProfile';
-import PatientList from '../components/PatientList';
-import WorkCalendar from '../components/WorkCalendar';
-import HolAbsRequest from '../components/HolAbsRequest';
-import BookingDoc from '../components/BookingDoc';
-import ApointmentInfo from '../components/ApointmentInfo';
-import RewriteRecepie from '../components/RewriteRecepie';
-import { nurseDataSelector } from '../store/nurse/selectors';
+import { fetchNurseData } from '../store/user/actions';
+import { Spinner, Row, Col, Container, Card, Button } from 'react-bootstrap';
+import { userIdSelector, isFetchUserDataSelector } from '../store/user/selectors';
 
-const NurseHomePage = ({ match }) => {
+const NurseHomePage = () => {
     const dispatch = useDispatch();
-    const id = match.params.id;
-    const data = useSelector(nurseDataSelector);
+    const id = useSelector(userIdSelector);
+    const isFetchUserData = useSelector(isFetchUserDataSelector);
 
     useEffect(() => {
-        dispatch(
-            fetchNurseData({
-                id
-            })
-        );
-    }, []);
+        if (id != null) {
+            dispatch(
+                fetchNurseData({
+                    id
+                })
+            );
+        }
+    }, [id]);
+
+    if (!isFetchUserData) {
+        return <div className="d-flex justify-content-center">
+            <Spinner animation="border" role="status">
+                <span className="sr-only">Loading...</span>
+            </Spinner>
+        </div>;
+    }
 
     return (
-        <Tabs id="left-tabs-doc-home" >
-            <Tab eventKey="zero" title="Patients list">
-                <PatientList clinicId={data.clinicId}/>
-            </Tab>
-            <Tab eventKey="second" title="Holiday/absence requests">
-                <HolAbsRequest personnelId={data.id} clinicId={data.clinicId} />
-            </Tab>
-            <Tab eventKey="third" title="Perscriptions">
-                <RewriteRecepie nurseId={data.id} />
-            </Tab>
-            <Tab eventKey="fourth" title="WorkCalendar">
-                <WorkCalendar personnelId={data.id} role={data.role} />
-            </Tab>
-            <Tab eventKey="fifth" title=" User Profile">
-                <UserProfile data={data} />
-            </Tab>
-        </Tabs>
+        <Container>
+            <Row>
+                <Col md={{ span: 10, offset: 1 }} xs={12}>
+                    <h2 className="border-bottom">Doctor admin profile</h2>
+                </Col>
+            </Row>
+            <Row>
+                <Col md={{ span: 3, offset: 1 }} xs={12}>
+                    <Card style={{ width: '18rem' }}>
+                        <Card.Body>
+                            <Card.Title>Patient list</Card.Title>
+                            <Card.Text>
+                                You can see patient list.
+                            </Card.Text>
+                            <Button variant="primary" onClick={() => { history.push('/pers/pat-list'); }}>Patients</Button>
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col md={{ span: 3 }} xs={12}>
+                    <Card style={{ width: '18rem' }}>
+                        <Card.Body>
+                            <Card.Title>Work Calendar</Card.Title>
+                            <Card.Text>
+                                You can access work calendar.
+                            </Card.Text>
+                            <Button variant="primary" onClick={() => { history.push('/pers/work-cal'); }}>Calendar</Button>
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col md={{ span: 3 }} xs={12}>
+                    <Card style={{ width: '18rem' }}>
+                        <Card.Body>
+                            <Card.Title>Holiday and absence</Card.Title>
+                            <Card.Text>
+                                You can make holiday or absence requirement
+                            </Card.Text>
+                            <Button variant="primary" onClick={() => { history.push('/pers/hol-abs'); }} >Go to</Button>
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
+            <Row>
+                <Col md={{ span: 3, offset: 1 }} xs={12}>
+                    <Card style={{ width: '18rem' }}>
+                        <Card.Body>
+                            <Card.Title>Rewrite prescriptions</Card.Title>
+                            <Card.Text>
+                                Page for prescription rewrite
+                            </Card.Text>
+                            <Button variant="primary" onClick={() => { history.push('/nurse-page/rew-presc'); }} >Go to</Button>
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col md={{ span: 3 }} xs={12}>
+                    <Card style={{ width: '18rem' }}>
+                        <Card.Body>
+                            <Card.Title>User profile</Card.Title>
+                            <Card.Text>
+                                You can access your profile
+                            </Card.Text>
+                            <Button variant="primary" onClick={() => { history.push('/user-prof'); }}>Profile</Button>
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
+        </Container>
     );
 }
 

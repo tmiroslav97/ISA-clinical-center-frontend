@@ -4,23 +4,18 @@ export const REGISTRATION = 'registration';
 export const PUT_USER_DATA = 'put_user_data';
 export const PUT_USER_TOKEN = 'put_user_token';
 export const CHANGE_PASSWORD = 'change_password';
+export const PUT_USER_ID = 'put_user_id';
 export const SIGN_OUT = 'sign_out';
+export const PUT_IS_FETCH_USER_DATA = 'put_is_fetch_user_data';
 //clinic center admin constants
 export const FETCH_CCADMIN_DATA = 'fetch_ccadmin_data';
-export const FETCH_REG_REQS_DATA = 'fetch_reg_reqs_data';
-export const PUT_REG_REQS_DATA = 'put_req_reqs_data';
-export const APPROVE_REG_REQ = 'approve_reg_req';
-export const REJECT_REG_REQ = 'reject_reg_req'; 
 export const REG_CC_ADMIN = 'register_cc_admin';
-export const REG_CLINIC = 'register_clinic';
-export const FETCH_CLINICS_DATA = 'fetch_clinics_data';
-export const PUT_CLINICS_DATA = 'put_clinics_data';
-export const REG_CLINIC_ADMIN = 'reg_clinic_admin';
-export const ADD_MEDICINE = 'add_medicine';
-export const PUT_MEDICINE_DATA = 'put_medicine_data';
-export const FETCH_MEDICINE_DATA = 'fetch_medicine_data';
-export const PUT_MEDICINE_RECORD = 'put_medicine_record';
-export const FETCH_MEDICINE_RECORD = 'fetch_medicine_record';
-export const ADD_DIAGNOSE = 'add_diagnose';
-export const PUT_DIAGNOSE_DATA = 'put_diagnose_data';
-export const FETCH_DIAGNOSE_DATA = 'fetch_diagnose_data';
+//nurse constants
+export const FETCH_NURSE_DATA = 'fetch_nurse_data';
+//clinic admin constants
+export const FETCH_CADMIN_DATA = 'fetch_cadmin_data';
+//patient constants
+export const FETCH_PATIENT_DATA = 'fetch_patient_data';
+//doctor constants
+export const FETCH_DOCTOR_DATA = 'fetch_doctor_data';
+export const EDIT_USER_INFORMATION = 'edit_user_information';

@@ -1,8 +1,10 @@
 import React from 'react';
-import { Row, Tab, Nav, Col, Container, Table, Button } from 'react-bootstrap';
+import { Row, Col, Container, Table, Button } from 'react-bootstrap';
+import { userDataSelector } from '../store/user/selectors';
+import { useSelector } from 'react-redux';
 
-const UserProfile = ({ data }) => {
-
+const UserProfile = ({ }) => {
+    const data = useSelector(userDataSelector);
     return (
         <Container>
             <Row>

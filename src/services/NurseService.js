@@ -1,11 +1,10 @@
 import HttpClient from './HttpBaseClient';
-import { history } from '../index';
 import { format } from 'util';
 
 const FINALPOINTS = {
     FETCH_NURSE_DATA: '/nurse/%s',
-    FETCH_RECEPIES: '/nurse/recepies',
-    REWRITE_RECEPIE: '/nurse/rewrite/%s/%s'
+    FETCH_RECEPIES: '/prescription/all/%s',
+    REWRITE_PRESCRIPTION: '/prescription/rewrite/%s/%s'
 };
 
 class NurseService extends HttpClient {
@@ -21,28 +20,28 @@ class NurseService extends HttpClient {
         }
     }
 
-    fetchRecepies = async payload => {
+    fetchPrescriptions = async payload => {
         try {
             const { data } = await this.getApiClient().get(
-                FINALPOINTS.FETCH_RECEPIES
+                format(FINALPOINTS.FETCH_RECEPIES, payload.clinicId)
             );
-
-            const recepies = data;
-            return { recepies };
+            
+            const prescriptions = data;
+            return { prescriptions };
         } catch (error) {
-            console.log(error.response.data);
+            return error.response;
         }
     }
 
-    rewriteRecepie = async payload => {
+    reweritePrescription = async payload => {
         try {
             const { data } = await this.getApiClient().post(
-                format(FINALPOINTS.REWRITE_RECEPIE, payload.nurseId, payload.recepieId)
+                format(FINALPOINTS.REWRITE_PRESCRIPTION, payload.nurseId, payload.prescriptionId)
             );
 
             return { data };
         } catch (error) {
-            console.log(error.response.data);
+            return error.response;
         }
     }
 

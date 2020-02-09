@@ -1,24 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { history } from '../../index';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { regCCAdmin } from '../../store/user/actions';
+import { userIdSelector, userDataSelector, isFetchUserDataSelector } from '../../store/user/selectors';
 
-const AdminReg = ({ ccaId }) => {
+const AdminReg = () => {
     const dispatch = useDispatch();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [firstName, setFirstName] = useState();
     const [lastName, setLastName] = useState();
-    const handleRegCCAdmin = () => {
-        dispatch(
-            regCCAdmin({
-                ccaId,
-                email,
-                password,
-                firstName,
-                lastName
-            })
-        );
+    const ccaId = useSelector(userIdSelector);
+    const userData = useSelector(userDataSelector);
+    const isFetchUserData = useSelector(isFetchUserDataSelector);
+    const [validated, setValidated] = useState(false);
+
+
+    useEffect(() => {
+        if (isFetchUserData && !userData.predefined) {
+            history.push('/ccadmin');
+        }
+    }, [ccaId]);
+
+    const handleRegCCAdmin = (event) => {
+        const form = event.currentTarget;
+        event.preventDefault();
+        if (form.checkValidity() === false) {
+            event.stopPropagation();
+            setValidated(true);
+        } else {
+            dispatch(
+                regCCAdmin({
+                    ccaId,
+                    email,
+                    password,
+                    firstName,
+                    lastName
+                })
+            );
+            setValidated(false);
+        }
     };
 
     return (
@@ -30,11 +52,11 @@ const AdminReg = ({ ccaId }) => {
             </Row>
             <Row>
                 <Col md={{ span: 10, offset: 1 }} xs={12}>
-                    <Form>
+                    <Form noValidate validated={validated} onSubmit={handleRegCCAdmin}>
                         <Form.Row>
                             <Form.Group as={Col}>
                                 <Form.Label>Admin e-mail:</Form.Label>
-                                <Form.Control type="text" placeholder="Enter admin e-mail"
+                                <Form.Control required type="email" placeholder="Enter admin e-mail"
                                     onChange={({ currentTarget }) => {
                                         setEmail(currentTarget.value);
                                     }}
@@ -42,17 +64,20 @@ const AdminReg = ({ ccaId }) => {
                             </Form.Group>
                             <Form.Group as={Col}>
                                 <Form.Label>Admin password:</Form.Label>
-                                <Form.Control type="password" placeholder="Enter admin password"
+                                <Form.Control required type="password" pattern=".{5,25}" placeholder="Enter admin password"
                                     onChange={({ currentTarget }) => {
                                         setPassword(currentTarget.value);
                                     }}
                                 />
+                                <Form.Control.Feedback type="invalid">
+                                    min 5 max 25 characters
+                                </Form.Control.Feedback>
                             </Form.Group>
                         </Form.Row>
                         <Form.Row>
                             <Form.Group as={Col}>
                                 <Form.Label>First name:</Form.Label>
-                                <Form.Control type="text" placeholder="Enter admin first name"
+                                <Form.Control required type="text" placeholder="Enter admin first name"
                                     onChange={({ currentTarget }) => {
                                         setFirstName(currentTarget.value);
                                     }}
@@ -60,14 +85,14 @@ const AdminReg = ({ ccaId }) => {
                             </Form.Group>
                             <Form.Group as={Col}>
                                 <Form.Label>Last name:</Form.Label>
-                                <Form.Control type="text" placeholder="Enter admin last name"
+                                <Form.Control required type="text" placeholder="Enter admin last name"
                                     onChange={({ currentTarget }) => {
                                         setLastName(currentTarget.value);
                                     }}
                                 />
                             </Form.Group>
                         </Form.Row>
-                        <Button variant="primary" onClick={handleRegCCAdmin}>
+                        <Button variant="primary" type="submit">
                             Register
                         </Button>
                     </Form>

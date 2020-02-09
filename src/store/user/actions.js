@@ -6,110 +6,43 @@ import {
     CHANGE_PASSWORD,
     SIGN_OUT,
     FETCH_CCADMIN_DATA,
-    FETCH_REG_REQS_DATA,
-    PUT_REG_REQS_DATA,
-    APPROVE_REG_REQ,
-    REJECT_REG_REQ,
     REG_CC_ADMIN,
-    REG_CLINIC,
-    FETCH_CLINICS_DATA,
-    PUT_CLINICS_DATA,
-    REG_CLINIC_ADMIN,
-    ADD_MEDICINE,
-    PUT_MEDICINE_RECORD,
-    FETCH_MEDICINE_RECORD,
-    ADD_DIAGNOSE,
-    PUT_DIAGNOSE_DATA,
-    PUT_MEDICINE_DATA,
-    FETCH_MEDICINE_DATA,
-    FETCH_DIAGNOSE_DATA
+    FETCH_NURSE_DATA,
+    FETCH_CADMIN_DATA,
+    FETCH_PATIENT_DATA,
+    FETCH_DOCTOR_DATA,
+    PUT_IS_FETCH_USER_DATA,
+    PUT_USER_ID,
+    EDIT_USER_INFORMATION
 } from './constants';
 
+//patient actions
+export const fetchPatientData = payload => ({
+    type: FETCH_PATIENT_DATA,
+    payload
+});
+
+//cadmin actions
+export const fetchCAdminData = payload => ({
+    type: FETCH_CADMIN_DATA,
+    payload
+});
+
+//doctor actions
+export const fetchDoctorData = payload => ({
+    type: FETCH_DOCTOR_DATA,
+    payload
+});
+
+//nurse actions
+export const fetchNurseData = payload => ({
+    type: FETCH_NURSE_DATA,
+    payload
+});
 
 //clinic center admin actions
-export const fetchMedicineRecord = payload => ({
-    type: FETCH_MEDICINE_RECORD,
-    payload
-});
-
-export const addMedicine = payload => ({
-    type: ADD_MEDICINE,
-    payload
-});
-
-export const fetchMedicineData = payload => ({
-    type: FETCH_MEDICINE_DATA,
-    payload
-});
-
-export const putMedicineData = payload => ({
-    type: PUT_MEDICINE_DATA,
-    payload
-});
-
-export const addDiagnose = payload => ({
-    type: ADD_DIAGNOSE,
-    payload
-});
-
-export const putDiagnoseData = payload => ({
-    type: PUT_DIAGNOSE_DATA,
-    payload
-});
-
-export const fetchDiagnoseData = payload => ({
-    type: FETCH_DIAGNOSE_DATA,
-    payload
-});
-
-export const putMedicineRecord = payload => ({
-    type: PUT_MEDICINE_RECORD,
-    payload
-});
-
-export const regClinicAdmin = payload => ({
-    type: REG_CLINIC_ADMIN,
-    payload
-});
-
-export const putClinicsData = payload => ({
-    type: PUT_CLINICS_DATA,
-    payload
-});
-
-export const regClinic = payload => ({
-    type: REG_CLINIC,
-    payload
-});
-
-export const fetchClinicsData = payload => ({
-    type: FETCH_CLINICS_DATA,
-    payload
-});
-
-
 export const fetchCCAdminData = payload => ({
     type: FETCH_CCADMIN_DATA,
-    payload
-});
-
-export const fetchRegReqsData = payload => ({
-    type: FETCH_REG_REQS_DATA,
-    payload
-});
-
-export const putRegReqsData = payload => ({
-    type: PUT_REG_REQS_DATA,
-    payload
-});
-
-export const approveRegReq = payload => ({
-    type: APPROVE_REG_REQ,
-    payload
-});
-
-export const rejectRegReq = payload => ({
-    type: REJECT_REG_REQ,
     payload
 });
 
@@ -119,6 +52,16 @@ export const regCCAdmin = payload => ({
 });
 
 //user actions
+export const putUserId = payload => ({
+    type: PUT_USER_ID,
+    payload
+});
+
+export const putIsFetchUserData = payload => ({
+    type: PUT_IS_FETCH_USER_DATA,
+    payload
+});
+
 export const signOut = payload => ({
     type: SIGN_OUT,
     payload
@@ -149,3 +92,7 @@ export const changePassword = payload => ({
     payload
 });
 
+export const editUserInformation = payload => ({
+    type: EDIT_USER_INFORMATION,
+    payload
+});

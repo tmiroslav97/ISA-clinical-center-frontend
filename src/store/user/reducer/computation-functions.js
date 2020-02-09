@@ -12,37 +12,16 @@ export function putUserToken(state, payload) {
     };
 }
 
-export function putRegReqsData(state, payload) {
+export function putUserId(state, payload) {
     return {
         ...state,
-        reqs: payload
+        id: payload
     };
 }
 
-export function putClinicsData(state, payload) {
+export function putIsFetchUserData(state, payload) {
     return {
         ...state,
-        clinics: payload
-    };
-}
-
-export function putMedicineRecordData(state, payload) {
-    return {
-        ...state,
-        medicineRecord: payload
-    };
-}
-
-export function putMedicineData(state, payload) {
-    return {
-        ...state,
-        medicines: payload
-    };
-}
-
-export function putDiagnoseData(state, payload) {
-    return {
-        ...state,
-        diagnoses: payload
+        isFetchUserData: payload
     };
 }

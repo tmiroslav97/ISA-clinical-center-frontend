@@ -3,23 +3,25 @@ import { history } from '../index';
 import { format } from 'util';
 
 const FINALPOINTS = {
-    FETCH_ROOMS_DATA: 'admi-cli/rooms',
-    SEARCH_ROOMS_DATA: 'admi-cli/rooms/search/%s/%s',
-    DELETE_ROOMS_DATA: 'admi-cli/rooms/delete/%s'
-    
+    FETCH_ROOMS_DATA: '/room/all/%s/%s',
+    SEARCH_ROOMS_DATA: '/room/search',
+    DELETE_ROOMS_DATA: '/room/delete/%s',
+    SEARCH_ROOMS: '/room/search-rooms',
+    ADD_ROOM: '/room/add-room/%s',
+    EDIT_ROOM: '/room/edit-room',
+    DELETE_ROOM: '/room/delete-room/%s'
+
 };
 
-class RoomService extends HttpClient{
+class RoomService extends HttpClient {
 
     fetchRoomsData = async payload => {
         try {
             const { data } = await this.getApiClient().get(
-                FINALPOINTS.FETCH_ROOMS_DATA
+                format(FINALPOINTS.FETCH_ROOMS_DATA, payload.clinicId, payload.pageCnt)
             );
 
-            const rooms = data;
-
-            return { rooms };
+            return { data };
         } catch (error) {
             console.log(error.response.data);
         }
@@ -60,9 +62,10 @@ class RoomService extends HttpClient{
             console.log(error.response.data);
         }
     };
+
     searchRoomsData = async payload => {
         try {
-            const { data } = await this.getApiClient().get(
+            const { data } = await this.getApiClient().post(
                 FINALPOINTS.SEARCH_ROOMS_DATA,
                 payload
             );
@@ -72,6 +75,60 @@ class RoomService extends HttpClient{
             console.log(error.response.data);
         }
     };
+
+    searchRooms = async payload => {
+        try {
+            const { data } = await this.getApiClient().post(
+                FINALPOINTS.SEARCH_ROOMS,
+                payload
+            );
+            return { data };
+        } catch (error) {
+            console.log(error.response.data);
+        }
+    };
+    
+    addRoom = async payload => {
+        try {
+            const { data } = await this.getApiClient().post(
+                format(FINALPOINTS.ADD_ROOM, payload.clinicId),
+                payload
+            );
+            const response = data;
+            return { response };
+        } catch (error) {
+            const response = error.response;
+            return {response};
+        }
+    };
+
+    editRoom = async payload => {
+        try {
+            const { data } = await this.getApiClient().post(
+                FINALPOINTS.EDIT_ROOM,
+                payload
+            );
+            const response = data;
+            return { response };
+        } catch (error) {
+            const response = error.response.data;
+            return {response};
+        }
+    };
+
+    deleteRoom = async payload => {
+        try{
+            const {data} = await this.getApiClient().post(
+                format(FINALPOINTS.DELETE_ROOM, payload.id),
+                payload
+            )
+            const response = data;
+            return { response };
+        } catch (error) {
+            const response = error.response.data;
+            return {response};
+        }
+    }
 
 }
 

@@ -1,41 +1,79 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Container, Col, Row, Form, Button, Modal } from 'react-bootstrap';
+import { Table, Container, Col, Row, Form, Button, Modal, Spinner } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { addAppointmentType, fetchAppointmentType } from '../../store/clinic_admin/actions';
-import { appointmentTypeSelector } from '../../store/clinic_admin/selectors';
+import { addAppointmentType, fetchAppointmentType, deleteAppointmentType, editAppointmentType, searchAppointmentType } from '../../store/appointments/actions';
+import { appointmentTypeSelector, isFetchAppointmentTypeSelector } from '../../store/appointments/selectors';
+import { userDataSelector } from '../../store/user/selectors';
 
 
 const AppointmentTypAllAtOnce = () => {
     const dispatch = useDispatch();
-    const [type, setType] = useState();
+    const [type, setType] = useState('');
+    const [typeId, setTypeId] = useState(0);
+    const [cliId, setCliId] = useState(0);
     const appointmentTypes = useSelector(appointmentTypeSelector);
-
+    const isFetchAppointmentTypes = useSelector(isFetchAppointmentTypeSelector);
+    const data = useSelector(userDataSelector);
+    const clinicId = data.clinicId;
     const [show1, setShow1] = useState(false);
     const [show2, setShow2] = useState(false);
 
-    const handleClose1 = () => setShow1(false);
-    const handleShow1 = () => setShow1(true);
-
     const handleShow2 = () => setShow2(true);
 
+    const handleEdit = () => {
+        dispatch(
+            editAppointmentType({id:typeId, type, clinicId})
+        );
+        setShow1(false);
+    }
+
+    const handleEditShow  = (appointment)=>{
+        setType(appointment.type);
+        setTypeId(appointment.id);
+        setShow1(true);
+    }
+
+    const handleDelete = (appointment) => {
+        //console.log(appointment);
+        dispatch(
+            deleteAppointmentType({id:appointment.id, clinicId})
+        );
+    }
+
     const handleAddAppointmentType = () => {
+        setCliId(clinicId);
         dispatch(
             addAppointmentType({
-                type
+                type,  clinicId
             })
         );
         setShow2(false);
     };
+    //console.log(clinicId);
+
+    const handleSearchAppointmentType = () => {
+        dispatch(
+            searchAppointmentType({type, clinicId})
+        );
+    };
+
     useEffect(() => {
         dispatch(
-            fetchAppointmentType({})
+            fetchAppointmentType({clinicId})
         );
-    }, []);
+    }, [clinicId]);
 
+    if (!isFetchAppointmentTypes) {
+        return <div className="d-flex justify-content-center">
+            <Spinner animation="border" role="status">
+                <span className="sr-only">Loading...</span>
+            </Spinner>
+        </div>;
+    }
 
     return (
         <>
-            <Modal show={show1} onHide={handleClose1} animation={false}>
+            <Modal show={show1} onHide={handleEdit} animation={false}>
                 <Modal.Header closeButton>
                     <Modal.Title>Edit data:</Modal.Title>
                 </Modal.Header>
@@ -43,12 +81,13 @@ const AppointmentTypAllAtOnce = () => {
                     <Form>
                         <Form.Group as={Col}>
                             <Form.Label>Type:</Form.Label>
-                            <Form.Control type="text" />
+                            <Form.Control type="text" value={type} onChange={({ currentTarget }) => {
+                                setType(currentTarget.value);}} />
                         </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={handleClose1}>
+                    <Button variant="primary" onClick={handleEdit}>
                         Edit
           </Button>
                 </Modal.Footer>
@@ -79,72 +118,63 @@ const AppointmentTypAllAtOnce = () => {
 
             <Container>
                 <Row >
-                    <Col md={{ span:10, offset:1  }} xs={12}>
+                    <Col md={{ span: 10, offset: 1 }} xs={12}>
                         <h3 className="border-bottom">Appointment types</h3>
                     </Col>
                 </Row>
                 <Row >
-                    <Col md={{ span:5, offset:1  }} xs={12}>
-                    <Form>
-                        <Form.Group as={Row} >
+                    <Col md={{ span: 5, offset: 1 }} xs={12}>
+                        <Form>
+                            <Form.Group as={Row} >
 
-                            <Form.Label>Add new appointment type:</Form.Label>
-                            <Col>
-                                <Button onClick={handleShow2} >Add </Button>
-                            </Col>
-                        </Form.Group>
+                                <Form.Label>Add new appointment type:</Form.Label>
+                                <Col>
+                                    <Button onClick={handleShow2} >Add </Button>
+                                </Col>
+                            </Form.Group>
 
-                        <Form.Group as={Row} >
+                            <Form.Group as={Row} >
 
-                            <Form.Label>Search appointment types:</Form.Label>
-                            <Col>
-                                <Form.Control type="text" placeholder="Search " />
-                            </Col>
-                            <Col>
-                            <Button>Search</Button>
-                        </Col>
-                        </Form.Group>
-
-                        <Form.Group as={Row} controlId="formGridState1">
-                            <Form.Label>Filter data by</Form.Label>
-                            <Col>
-                                <Form.Control as="select">
-                                    <option>Choose...</option>
-                                    <option>...</option>
-                                </Form.Control>
-                            </Col>
-                        </Form.Group>
+                                <Form.Label>Search appointment types:</Form.Label>
+                                <Col>
+                                    <Form.Control type="text" placeholder="Search "  onChange={({ currentTarget }) => {
+                                setType(currentTarget.value);}}/>
+                                </Col>
+                                <Col>
+                                    <Button onClick={handleSearchAppointmentType}>Search</Button>
+                                </Col>
+                            </Form.Group>
 
 
-                    </Form>
+                        </Form>
                     </Col>
                 </Row>
                 <Row  >
-                    <Col md={{ span:10, offset:1  }} xs={12}>
-                    <Table responsive>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Type</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                appointmentTypes.map((appointment, index) => {
-                                    return (
-                                        <tr key={appointment.id}>
-                                            <td>{index + 1}</td>
-                                            <td>{appointment.type}</td>
-                                            <td><Button variant="success">Edit</Button></td>
-                                            <td><Button variant="danger">Delete</Button></td>
-                                        </tr>
-                                    );
-                                })
-                            }
-                        </tbody>
-                    </Table>
+                    <Col md={{ span: 10, offset: 1 }} xs={12}>
+                        <Table responsive>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Type</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    appointmentTypes.map((appointment, index) => {
+                                        return (
+                                            <tr key={appointment.id}>
+                                                <td>{index + 1}</td>
+                                                <td>{appointment.type}</td>
+                                                <td><Button variant="success" onClick={()=>{handleEditShow(appointment)}}>Edit</Button></td>
+                                                <td><Button variant="danger" onClick={()=>{handleDelete(appointment);}}>Delete</Button></td>
+                                            </tr>
+                                        );
+                                    })
+                                }
+                            </tbody>
+                        </Table>
                     </Col>
                 </Row>
             </Container >

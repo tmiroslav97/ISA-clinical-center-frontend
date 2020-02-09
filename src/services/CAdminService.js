@@ -3,47 +3,18 @@ import { history } from '../index';
 import { format } from 'util';
 
 const FINALPOINTS = {
-    FETCH_ADMINC_DARA: '/adm-cli/%s',
-    ADD_DOCTOR: '/adm-cli/add-doctor',
-    ADD_APPOINTMENT_TYPE: 'adm-cli/add-appointment-type',
-    FETCH_DOCTORS_DATA: '/adm-cli/doctors'
+    FETCH_ADMINC_DATA: '/adm-cli/%s',
+    EDIT_USER_INFORMATION: '/user/edit-user-profile'
 };
 
 
 class CAdminService extends HttpClient{
 
-
-
-    addDoctor = async payload => {
-        try {
-            const { data } = await this.getApiClient().post(
-                FINALPOINTS.ADD_DOCTOR, 
-                payload
-            );
-
-            return { data };
-        } catch (error) {
-            console.log(error.response.data);
-        }
-    };
-
-    addAppointmentType = async payload => {
-        try {
-            const { data } = await this.getApiClient().post(
-                FINALPOINTS.ADD_APPOINTMENT_TYPE,
-                payload
-            );
-
-            return { data };
-        } catch (error) {
-            console.log(error.response.data);
-        }
-    };
     
     fetchCAdminData = async payload => {
         try {
             const { data } = await this.getApiClient().get(
-                format(FINALPOINTS.FETCH_ADMINC_DATA, payload.cAdminId)
+                format(FINALPOINTS.FETCH_ADMINC_DATA, payload.id)
             );
             return { data };
         } catch (error) {
@@ -51,21 +22,28 @@ class CAdminService extends HttpClient{
         }
     };
 
-    fetchDoctorsData = async payload => {
+    editUserInformation = async payload => {
         try {
-            const { data } = await this.getApiClient().get(
-                FINALPOINTS.FETCH_DOCTORS_DATA
+            const { data } = await this.getApiClient().post(
+                FINALPOINTS.EDIT_USER_INFORMATION, 
+                payload
             );
-
-            const doctors = data;
-
-            return { doctors };
+            const response = data;
+            return { response };
         } catch (error) {
             console.log(error.response.data);
+            const response = error.response;
+            return {response};
         }
-    }; 
+    };
 
-   /* fetchDoctorData = async payload => {
+
+
+
+    
+
+   /* fetchDoctorData = async payload => {//eslint-disable-next-line
+
         try {
             const { data } = await this.getApiClient().get(
                 FINALPOINTS.FETCH_DOCTOR_DATA

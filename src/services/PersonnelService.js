@@ -3,8 +3,8 @@ import { history } from '../index';
 import { format } from 'util';
 
 const FINALPOINTS = {
-    ABS_HOL_REQUEST: '/personnel/abs-hol',
-    FETCH_ABS_HOL_REQUEST: '/personnel/my-abs-hol/%s',
+    ABS_HOL_REQUEST: '/absence-hol/req',
+    FETCH_ABS_HOL_REQUEST: '/absence-hol/my-abs-hol/%s',
     FETCH_CALENDAR: '/personnel/my-cal/%s'
 };
 
@@ -18,7 +18,7 @@ class PersonnelService extends HttpClient {
 
             return { data };
         } catch (error) {
-            console.log(error.response.data);
+            return error.response;
         }
     }
 
@@ -31,7 +31,7 @@ class PersonnelService extends HttpClient {
             const absholrequests = data;
             return { absholrequests };
         } catch (error) {
-            console.log(error.response.data);
+            return error.response;
         }
     }
 
@@ -41,10 +41,24 @@ class PersonnelService extends HttpClient {
                 format(FINALPOINTS.FETCH_CALENDAR, payload.personnelId)
             );
 
-            const calendar = data;
+            let calendar = {
+                id: data.id,
+                calendarItemResponses: []
+            };
+
+            data.calendarItemResponses.forEach(element => calendar.calendarItemResponses.push({
+                id: element.id,
+                title: element.title,
+                start: new Date(element.start),
+                end: new Date(element.end),
+                type: element.type,
+                typeId: element.typeId,
+                allday: element.allday
+            }));
+
             return { calendar };
         } catch (error) {
-            console.log(error.response.data);
+            return error.response;
         }
     }
 

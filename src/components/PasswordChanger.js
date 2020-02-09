@@ -9,15 +9,29 @@ const PasswordChanger = () => {
     const [oldPassword, setOldPassword] = useState();
     const [newPassword, setNewPassword] = useState();
     const [confNewPassword, setConfNewPassword] = useState();
+    const [msg, setMsg] = useState('');
+    const [validated, setValidated] = useState(false);
 
-    const handleChange = () => {
-        dispatch(
-            changePassword({
-                oldPassword,
-                newPassword,
-                confNewPassword
-            })
-        );
+    const handleChange = (event) => {
+        const form = event.currentTarget;
+        event.preventDefault();
+        if (form.checkValidity() === false) {
+            event.stopPropagation();
+            setMsg('min 5 max 25 characters');
+        } else if (newPassword !== confNewPassword) {
+            event.stopPropagation();
+            setMsg('Password doesn\'tmatch');
+        } else {
+            setMsg('');
+            dispatch(
+                changePassword({
+                    oldPassword,
+                    newPassword,
+                    confNewPassword
+                })
+            );
+        }
+        setValidated(true);
     };
 
     return (
@@ -29,36 +43,45 @@ const PasswordChanger = () => {
             </Row>
             <Row>
                 <Col md={{ span: 3, offset: 4 }} xs={12}>
-                    <Form>
+                    <Form noValidate validated={validated} onSubmit={handleChange}>
                         <Form.Group as={Col} controlId="formOld">
                             <div align="center">
                                 <Form.Label>Old password:</Form.Label>
                             </div>
-                            <Form.Control type="password" placeholder="Enter old password"
+                            <Form.Control required type="password" pattern=".{5,25}" placeholder="Enter old password"
                                 onChange={({ currentTarget }) => {
                                     setOldPassword(currentTarget.value);
                                 }} />
+                            <Form.Control.Feedback type="invalid">
+                                min 5 max 25 characters
+                            </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group as={Col} controlId="formNew">
                             <div align="center">
                                 <Form.Label>New password:</Form.Label>
                             </div>
-                            <Form.Control type="password" placeholder="Enter new password"
+                            <Form.Control required type="password" pattern=".{5,25}" placeholder="Enter new password"
                                 onChange={({ currentTarget }) => {
                                     setNewPassword(currentTarget.value);
                                 }} />
+                            <Form.Control.Feedback type="invalid">
+                                min 5 max 25 characters
+                            </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group as={Col} controlId="formConfNew">
                             <div align="center">
                                 <Form.Label>Confirm new password:</Form.Label>
                             </div>
-                            <Form.Control type="password" placeholder="Confirm new password"
+                            <Form.Control required type="password" pattern=".{5,25}" placeholder="Confirm new password"
                                 onChange={({ currentTarget }) => {
                                     setConfNewPassword(currentTarget.value);
                                 }} />
+                            <Form.Control.Feedback type="invalid">
+                                {msg}
+                            </Form.Control.Feedback>
                         </Form.Group>
                         <div align="center">
-                            <Button variant="primary" onClick={handleChange}>
+                            <Button variant="primary" type="submit">
                                 Change
                         </Button>
                         </div>

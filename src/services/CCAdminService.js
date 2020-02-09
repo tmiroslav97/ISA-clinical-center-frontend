@@ -4,15 +4,12 @@ import { format } from 'util';
 
 const FINALPOINTS = {
     FETCH_CCADMIN_DATA: '/cca/%s',
-    FETCH_REG_REQS_DATA: '/cca/regreqs',
-    APPROVE_REG_REQ: '/cca/approve/%s',
-    REJECT_REG_REQ: '/cca/reject/%s/%s',
+    FETCH_REG_REQS_DATA: '/reg/regreqs/%s',
+    APPROVE_REG_REQ: '/reg/approve/%s',
+    REJECT_REG_REQ: '/reg/reject/%s/%s',
     REG_CC_ADMIN: '/cca/reg-cca/%s',
     REG_CLINIC: '/cca/reg-clinic',
     FETCH_CLINICS: '/cca/clinics',
-    REG_CLINIC_ADMIN: '/cca/reg-clinic-admin',
-    ADD_MEDICINE: '/cca/add-medicine',
-    ADD_DIAGNOSE: '/cca/add-diagnose',
 };
 
 class CCAdminService extends HttpClient {
@@ -24,19 +21,19 @@ class CCAdminService extends HttpClient {
             );
             return { data };
         } catch (error) {
-            console.log(error.response.data);
+            return error.response;
         }
     };
 
     fetchRegReqsData = async payload => {
         try {
             const { data } = await this.getApiClient().get(
-                FINALPOINTS.FETCH_REG_REQS_DATA
+                format(FINALPOINTS.FETCH_REG_REQS_DATA, payload.pageCnt)
             );
             const reqData = data;
             return { reqData };
         } catch (error) {
-            console.log(error.response.data);
+            return error.response;
         }
     };
 
@@ -45,21 +42,19 @@ class CCAdminService extends HttpClient {
             const { data } = await this.getApiClient().post(
                 format(FINALPOINTS.APPROVE_REG_REQ, payload.regReqId)
             );
-
             return { data };
         } catch (error) {
-            console.log(error.response.data);
+            return error.response;
         }
+
     };
 
     rejectRegReq = async payload => {
         try {
             const { data } = await this.getApiClient().post(format(FINALPOINTS.REJECT_REG_REQ, payload.reqId, payload.message));
-
             return { data };
-
         } catch (error) {
-            console.log(error.response.data);
+            return error.response;
         }
     };
 
@@ -70,23 +65,9 @@ class CCAdminService extends HttpClient {
                 payload
             );
 
-            return (data);
-        } catch (error) {
-            console.log(error.response.data);
-        }
-    };
-
-    regClinic = async payload => {
-        try {
-            const { data } = await this.getApiClient().post(
-                FINALPOINTS.REG_CLINIC,
-                payload
-            );
-
             return { data };
         } catch (error) {
-            console.log(error.response.data);
-            alert(error.response.data);
+            return error.response;
         }
     };
 
@@ -100,46 +81,7 @@ class CCAdminService extends HttpClient {
 
             return { clinics };
         } catch (error) {
-            console.log(error.response.data);
-        }
-    };
-
-    regClinicAdmin = async payload => {
-        try {
-            const { data } = await this.getApiClient().post(
-                FINALPOINTS.REG_CLINIC_ADMIN,
-                payload
-            );
-
-            return { data };
-        } catch (error) {
-            console.log(error.response.data);
-        }
-    };
-
-    addMedicine = async payload => {
-        try {
-            const { data } = await this.getApiClient().post(
-                FINALPOINTS.ADD_MEDICINE,
-                payload
-            );
-
-            return { data };
-        } catch (error) {
-            console.log(error.response.data);
-        }
-    };
-
-    addDiagnose = async payload => {
-        try {
-            const { data } = await this.getApiClient().post(
-                FINALPOINTS.ADD_DIAGNOSE,
-                payload
-            );
-
-            return { data };
-        } catch (error) {
-            console.log(error.response.data);
+            return error.response;
         }
     };
 
