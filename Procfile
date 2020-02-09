@@ -1,0 +1,1 @@
+web: node set HTTPS=true && npm start
