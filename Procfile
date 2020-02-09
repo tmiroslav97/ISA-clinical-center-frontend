@@ -1,1 +1,1 @@
-web: set HTTPS=true && npm start
+web: set "HTTPS=true" && npm start
