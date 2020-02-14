@@ -7,7 +7,6 @@ cache:
     - node_modules
     
 script:
-  - npm install -g serve
   - npm run build
 
 deploy:
