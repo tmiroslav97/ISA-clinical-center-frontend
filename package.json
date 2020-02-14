@@ -20,11 +20,10 @@
     "use-state-with-callback": "^1.0.18"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "serve -s build",
     "build": "unset \"CI\" && react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "deploy": "serve -s build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
