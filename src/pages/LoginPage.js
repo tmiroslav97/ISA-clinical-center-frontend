@@ -56,7 +56,7 @@ const LoginPage = () => {
 
                         <Form.Group >
                             <Form.Label>Password</Form.Label>
-                            <Form.Control required type="password" id="txtPass" pattern=".{3,25}" placeholder="Password"
+                            <Form.Control required type="password" id="txtPass" pattern=".{5,25}" placeholder="Password"
                                 onChange={({ currentTarget }) => {
                                     setPassword(currentTarget.value);
                                 }} />

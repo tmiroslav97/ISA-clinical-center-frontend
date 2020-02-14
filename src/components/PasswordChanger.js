@@ -18,9 +18,11 @@ const PasswordChanger = () => {
         if (form.checkValidity() === false) {
             event.stopPropagation();
             setMsg('min 5 max 25 characters');
+            setValidated(true);
         } else if (newPassword !== confNewPassword) {
             event.stopPropagation();
             setMsg('Password doesn\'tmatch');
+            setValidated(true);
         } else {
             setMsg('');
             dispatch(
@@ -31,7 +33,6 @@ const PasswordChanger = () => {
                 })
             );
         }
-        setValidated(true);
     };
 
     return (

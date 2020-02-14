@@ -25,17 +25,6 @@ const PatientPagination = () => {
         );
     }, [pageCnt, sort]);
 
-    const handleSerachPatients = (event) => {
-        event.preventDefault();
-        dispatch(
-            fetchPatientsPagination({
-                clinicId: data.clinicId,
-                pageCnt,
-                sort
-            })
-        );
-    };
-
     let items = [];
     for (let number = 1; number <= patientPageCnt; number++) {
         items.push(
@@ -77,7 +66,7 @@ const PatientPagination = () => {
             <Row>
                 <Col md={{ span: 10, offset: 1 }} xs={12}>
 
-                    <Form onSubmit={handleSerachPatients}>
+                    <Form onSubmit={(event)=>{event.preventDefault();}}>
                         <Form.Row>
                             <Form.Group as={Col} md="3">
                                 <Form.Label>Sort by:</Form.Label>
@@ -94,9 +83,6 @@ const PatientPagination = () => {
                                 </Form.Control>
                             </Form.Group>
                         </Form.Row>
-                        <Button variant="primary" type="submit">
-                            Search
-                        </Button>
                     </Form>
                 </Col>
             </Row>
